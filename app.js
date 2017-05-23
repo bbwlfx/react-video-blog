@@ -18,12 +18,16 @@ const server = http.createServer((req, res) => {
 	if(req.pathName.indexOf('/static/src') >= 0) {
 		app.serverStatic(path.join(__dirname, '/static/src'), req, res);	
 	}
+	// api
+	app.use('/form/login', loginRouter.handleLogin);
+	app.use('/form/addUser', loginRouter.handleRegister);
+	app.use('/upload', homeRouter.handleUpload);
+	app.use('/get_userinfo', homeRouter.getUserInfo);
 
+  // renderFile
 	app.use('/', loginRouter.render('login'));
 	app.use('/form', loginRouter.render('login'));
-	app.use('/form/login', loginRouter.handleLogin);
 	app.use('/form/register', loginRouter.render('register'));
-	app.use('/form/addUser', loginRouter.handleRegister);
 	app.use('/form/login/error', errorRouter.render({
 		status: '403',
 		errMsg: 'username or password error',
@@ -32,10 +36,9 @@ const server = http.createServer((req, res) => {
 		status: '403',
 		errMsg: 'user had existed...'
 	}));
-
 	app.use('/home', homeRouter.render);
-	app.use('/upload', homeRouter.handleUpload);
-
+	
+	// handle request
 	app.handle(req, res);
 
 }).listen(4567, () => {

@@ -1,3 +1,4 @@
+@import 'button';
 html {
 	height: 100%;
 }
@@ -22,15 +23,7 @@ body {
 			display: flex;
 			height: 100%;
 		}
-		.avatar-container {
-			width: 50%;
-			height: auto;
-			margin: auto;
-			img {
-				width: 100%;
-				height: auto;
-			}
-		}
+		
 		#infomation {
 			text-align: center;
 			flex: 2;
@@ -38,29 +31,120 @@ body {
 			border: 1px solid #eee;
 			background-color: rgba(255, 255, 255, 0.5);
 			position: relative;
+			min-width: 240px;
 			.infomation-container {
 				position: absolute;
 				top: 20%;
-			}
-			table {
-				border-spacing: 0px 10px;
-				margin: auto;
-				text-align: center;
-				width: 80%;
-			}
-			.infomation-edit a {
-				color: #000;
-				text-decoration: none;
-				&:hover{
-					text-decoration: underline;
-					color: #49a9ee;
+				.avatar-container {
+					width: 50%;
+					height: auto;
+					margin: auto;
+					img {
+						width: 100%;
+						height: auto;
+					}
 				}
+				table {
+					border-spacing: 0px 10px;
+					margin: auto;
+					text-align: center;
+					width: 80%;
+				}
+				.infomation-edit a {
+					color: #000;
+					text-decoration: none;
+					&:hover{
+						text-decoration: underline;
+						color: #49a9ee;
+					}
+				}
+			}	
+		}
+		@media (max-width: 1140px) {
+			#infomation {
+				display: none;
 			}
 		}
 		#video-list {
 			flex: 8;
+			position: relative;
+			.modal-content {
+				width: 500px;
+				height: 150px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -250px;
+				margin-top: -75px;
+				border: 1px solid #eee;
+				background-color: #fff;
+				border-radius: 5px;
+				.input {
+					width: 450px;
+					height: 40px;
+					display: inline-block;
+					border: 1px solid #fff000;
+					outline: 0px;
+					font-size: 20px;
+					color: #000;
+					position: absolute;
+					top: 20%;
+					left: 50%;
+					margin-left: -225px;
+					padding-left: 10px;
+				}
+				.button {
+					position: absolute;
+					bottom: 0;
+					text-align: center;
+					width: 100%;
+					.btn {
+						margin: 0px 5px 10px;
+						width: 150px;
+						height: 40px;
+						border-radius: 20px;
+					}
+				}
+			}
+			.video-list-container {
+				width: 80%;
+				height: 90%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translateX(-50%) translateY(-50%);
+				background-color: rgba(255, 255, 255, .8);
+				display: flex;
+				min-width: 900px;
+				min-height: 800px;
+				.video-list-content {
+					width: 95%;
+					height: 95%;
+					margin: auto;
+					.list {
+						list-style: none;
+						width: 100%;
+						height: 90%;
+						padding: 0;
+						margin: -10px 0px 0px;
+						.item {
+							width: 25%;
+							float: left;
+							.item-content {
+								height: 200px;
+								margin: 10px 10px 0px;
+							}
+						}
+					}
+					.upload-container {
+						height: 10%;
+						text-align: center;
+					}
+				}
+					
+			}
 		}
-		#modal {
+		#change-info {
 			.modal-container {
 				position: absolute;
 				width: 100%;
@@ -90,8 +174,8 @@ body {
 					left: 50%;
 					top: 30%;
 					transform: translateX(-50%) translateY(-50%);
-					background-color: rgba(255, 255, 255, 0.5);
-					form {
+					background-color: rgba(255, 255, 255, 1);
+					.form {
 						table {
 							border-spacing: 0px 10px;
 							.avatar {
@@ -112,4 +196,3 @@ body {
 		}
 	}
 }
-	

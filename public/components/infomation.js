@@ -6,23 +6,13 @@ class Infomation extends Component {
 	constructor(props) {
 		super(props);
 		this.showModal = props.showModal;
-		this.state = {
-			avatar: `${outputUrl}avatar-default.png`,
-		};
-	}
-	componentDidMount() {
-		const avatar = window.userInfo.avatar;
-		const cookieAvatar = /avatar=(.+?);/g.exec(document.cookie)[1];
-		this.setState({
-			avatar: `${outputUrl}${avatar || cookieAvatar}`,
-		});
 	}
 	render() {
-		const { nickname, sex, email, profile, age } = window.userInfo;
+		const { nickname, sex, email, profile, age, avatar } = this.props.userInfo;
 		return (
 			<div className="infomation-container">
 				<div className="avatar-container">
-					<img className="avatar" src={this.state.avatar} alt="请刷新页面"/>
+					<img className="avatar" src={`${outputUrl}${avatar ? avatar : 'avatar-default.png'}`} alt="请刷新页面"/>
 				</div>
 				<div className="infomation-content">
 					<table>

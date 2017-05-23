@@ -1,0 +1,28 @@
+.btn {
+	width: 200px;
+	height: 50px;
+	font-size: 20px;
+	border: 0px;
+	outline: 0px;
+	border-radius: 25px;
+	&:hover {
+		cursor: pointer;
+	}
+}
+.btn-primary {
+	color: #1b1b1b;
+	background-color: #fff000;
+	&:hover {
+		color: #1b1b1b;
+		background-color: #e8da03;
+	}
+}
+.btn-default {
+	background-color: #eee;
+	color: #ccc;
+	border: 1px solid #f4f4f4;
+	&:hover {
+		color: #ccc;
+		background-color: #fff;
+	}
+}

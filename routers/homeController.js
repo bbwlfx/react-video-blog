@@ -5,38 +5,30 @@ const path = require('path');
 const util = require('../lib/util');
 
 const saveData = postData => (req, res) => {
-	const co = req.cookies;
-	const username = co['username'];
+	const username = postData.username;
 	const { file, sex, email, profile, age, nickname } = postData;
+	let originData = {}
 	util.readData(data => {
 		for(let i = 0, len = data.length; i < len; i++) {
 			if(data[i].username === username) {
+				originData = data[i];
 				data[i] = Object.assign({}, data[i], {
-					sex: sex ? sex : co['sex'],
-					email: email ? email : co['email'],
-					profile: profile ? profile : co['profile'],
-					age: age ? age : co['age'],
-					avatar: file ? file : co['avatar'],
-					nickname: nickname ? nickname : co['nickname']
+					sex: sex ? sex : data[i]['sex'],
+					email: email ? email : data[i]['email'],
+					profile: profile ? profile : data[i]['profile'],
+					age: age ? age : data[i]['age'],
+					avatar: file ? file : data[i]['avatar'],
+					nickname: nickname ? nickname : data[i]['nickname']
 				});
 				break;
 			}
 		}
 		data = JSON.stringify(data);
 		util.writeData(data, () => {
-			res.setHeader('Set-Cookie', [
-				'has_login=yes;path=/',
-				`username=${username || ''};path=/`,
-				`avatar=${file || co['avatar']};path=/`,
-				`email=${email || co['email']};path=/`,
-				`sex=${sex || co['sex']};path=/`,
-				`profile=${profile || co['profile']};path=/`,
-				`nickname=${nickname || co['nickname']};path=/`,
-				`age=${age || co['age']};path=/`
-			]);
-			res.statusCode = 302;
-			res.setHeader('Location', '/home');
-			res.end();
+			res.end(JSON.stringify({
+				code: 0,
+				message: 'success',
+			}));
 		});
 	});
 };
@@ -62,22 +54,36 @@ module.exports = {
 		let postData = '';
 		req.on('data', (chunk) => {
 			postData += chunk;
-		});
+		}); 
 		req.on('end', () => {
-			postData = queryString.parse(postData);
+			postData = JSON.parse(postData);
 			const { file, avatarUrl } = postData;
 			if(file && avatarUrl) {
 				const base64Data = avatarUrl.replace(/^data:image\/\w+;base64,/, "");
 				const dataBuffer = new Buffer(base64Data, 'base64');
 				fs.writeFile(path.join(__dirname, '../static/src/images/', file), dataBuffer, function(err) {
 	        if(err){
-	        	res.end('error');
+	        	res.end(SON.stringify({
+							code: 1,
+							message: 'upload fail',
+						}));
 	        } else {
 	          saveData(postData)(req, res);
 	        }
 	    	});
 			} else {
 				saveData(postData)(req, res);
+			}
+		});
+	},
+	getUserInfo: (req, res) => {
+		const username = req.queryString.username;
+		util.readData(data => {
+			for(let i = 0, len = data.length; i < len; i++) {
+				if(data[i].username === username) {
+					res.end(JSON.stringify(data[i]));
+					break;
+				}
 			}
 		});
 	}

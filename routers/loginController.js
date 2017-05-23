@@ -27,12 +27,6 @@ module.exports = {
 					res.setHeader('Set-Cookie', [
 						'has_login=yes;path=/',
 						`username=${username || ''};path=/`,
-						`avatar=${avatar || ''};path=/`,
-						`email=${email || ''};path=/`,
-						`sex=${sex || ''};path=/`,
-						`profile=${profile || ''};path=/`,
-						`nickname=${nickname || ''};path=/`,
-						`age=${age || ''};path=/`
 					]);
 					res.setHeader('Location', '/home');
 					res.statusCode = 302;
@@ -68,6 +62,7 @@ module.exports = {
 						"sex": '',
 						"profile": '',
 						"age": '',
+						"videoList": [],
 					});
 					data = JSON.stringify(data);
 					util.writeData(data, () => {
