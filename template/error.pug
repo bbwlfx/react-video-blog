@@ -1,0 +1,9 @@
+extends ./common/common.pug
+block links
+	+_link('../static/src/css/error.css')
+block doms 
+	.error
+			p.status #{status}
+			p #{errMsg}
+			p
+				a.ret(href="/form") Return To Form

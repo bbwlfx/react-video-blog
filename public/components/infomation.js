@@ -1,0 +1,59 @@
+import React, {Component} from 'react';
+
+const outputUrl = '../../static/src/images/';
+
+class Infomation extends Component {
+	constructor(props) {
+		super(props);
+		this.showModal = props.showModal;
+		this.state = {
+			avatar: `${outputUrl}avatar-default.png`,
+		};
+	}
+	componentDidMount() {
+		const avatar = window.userInfo.avatar;
+		const cookieAvatar = /avatar=(.+?);/g.exec(document.cookie)[1];
+		this.setState({
+			avatar: `${outputUrl}${avatar || cookieAvatar}`,
+		});
+	}
+	render() {
+		const { nickname, sex, email, profile, age } = window.userInfo;
+		return (
+			<div className="infomation-container">
+				<div className="avatar-container">
+					<img className="avatar" src={this.state.avatar} alt="请刷新页面"/>
+				</div>
+				<div className="infomation-content">
+					<table>
+						<tr className="infomation-name">
+							<td>昵称:</td>
+							<td>{nickname}</td>
+						</tr>
+						<tr className="infomation-sex">
+							<td>性别:</td>
+							<td>{sex}</td>
+						</tr>
+						<tr className="infomation-age">
+							<td>年龄:</td>
+							<td>{age}</td>
+						</tr>
+						<tr className="infomation-email">
+							<td>邮箱:</td>
+							<td>{email}</td>
+						</tr>
+						<tr className="infomation-profile">
+							<td>博客:</td>
+							<td>{profile}</td>
+						</tr>
+					</table>
+					<p className="infomation-edit">
+						<a href="javascript:void(0)" onClick={this.showModal}>[编辑个人资料]</a>
+					</p>
+				</div>
+			</div>
+		);
+	}
+}
+
+export default Infomation;

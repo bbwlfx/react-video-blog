@@ -1,0 +1,10 @@
+extends ./common/common.pug
+block links
+	+_link('http://127.0.0.1:4444/assets/home.min.css')
+block doms
+	#home
+	.background-image
+block scripts
+	script(type="text/javascript").
+		window.userInfo = JSON.parse('!{userInfo}');
+	+_script('http://127.0.0.1:4444/assets/home.min.js')

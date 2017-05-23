@@ -1,0 +1,115 @@
+html {
+	height: 100%;
+}
+body {
+	margin: 0px;
+	height: 100%;
+	.background-image {
+		position: absolute;
+		z-index: -999;
+		width: 100%;
+		height: 100%;
+		background-image: url('/assets/images/sakura.jpg');
+		background-position: center center;
+		background-size: cover;
+		background-repeat: no-repeat;	
+		top: 0px;
+		left: 0px;	
+	}
+	#home {
+		height: 100%;
+		.home-container {
+			display: flex;
+			height: 100%;
+		}
+		.avatar-container {
+			width: 50%;
+			height: auto;
+			margin: auto;
+			img {
+				width: 100%;
+				height: auto;
+			}
+		}
+		#infomation {
+			text-align: center;
+			flex: 2;
+			color: #49a9ee;
+			border: 1px solid #eee;
+			background-color: rgba(255, 255, 255, 0.5);
+			position: relative;
+			.infomation-container {
+				position: absolute;
+				top: 20%;
+			}
+			table {
+				border-spacing: 0px 10px;
+				margin: auto;
+				text-align: center;
+				width: 80%;
+			}
+			.infomation-edit a {
+				color: #000;
+				text-decoration: none;
+				&:hover{
+					text-decoration: underline;
+					color: #49a9ee;
+				}
+			}
+		}
+		#video-list {
+			flex: 8;
+		}
+		#modal {
+			.modal-container {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				left: 0px;
+				top: 0px;
+				z-index: 10;
+				.layer {
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0, 0, 0, 0.3);
+				}
+				.close {
+					position: absolute;
+					right: 10px;
+					top: 10px;
+					text-decoration: none;
+					color: #000;
+					&:hover {
+						color: #fff;
+					}
+				}
+				.content {
+					border: 1px solid #eee;
+					padding: 20px 50px;
+					position: absolute;
+					left: 50%;
+					top: 30%;
+					transform: translateX(-50%) translateY(-50%);
+					background-color: rgba(255, 255, 255, 0.5);
+					form {
+						table {
+							border-spacing: 0px 10px;
+							.avatar {
+								width: 100px;
+								height: 100px;
+							}
+						}
+						p {
+							text-align: center;
+							input {
+								font-size: 20px;
+								margin: 0px 10px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+	
