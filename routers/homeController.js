@@ -66,11 +66,9 @@ const saveVideoList = (allData, username) => (req, res) => {
 module.exports = {
 	render: (req, res) => {
 		if(req.cookies["has_login"] === 'yes') {
-			const map = ['username', 'sex', 'email', 'profile', 'avatar', 'nickname', 'age'];
-			const userInfo = {};
-			map.map(value => {
-				userInfo[value] = req.cookies[value]
-			})
+			const userInfo = {
+				username: req.cookies['username']
+			};
 			util.renderFile('home.pug', {
 				userInfo: JSON.stringify(userInfo),
 			})(req, res);
