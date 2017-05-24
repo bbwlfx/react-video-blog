@@ -64,7 +64,7 @@ class VideoList extends Component {
 							data.map(obj => (
 								<li className="item">
 									<div className="item-content">
-										<a href={`http://www.bilibili.com/video/av${obj.av}`} className="img-a">
+										<a href={`http://www.bilibili.com/video/av${obj.av}`} target="_blank" className="img-a">
 											<img src={obj.img} />
 										</a>
 										<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{obj.title}</a>
