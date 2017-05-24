@@ -33,7 +33,7 @@ const saveData = postData => (req, res) => {
 	});
 };
 const saveVideoList = (allData, username) => (req, res) => {
-	const { title, av, img, time } = allData.data;
+	const { title, av, img, time, up } = allData.data;
 	const { view, favorite, danmaku, share } = allData.detail.data;
 	util.readData(data => {
 		for(let i = 0, len = data.length; i < len; i++) {
@@ -47,7 +47,8 @@ const saveVideoList = (allData, username) => (req, res) => {
 					view,
 					favorite,
 					danmaku,
-					share
+					share,
+					up
 				})
 				data[i] = Object.assign({}, data[i], { videoList });
 				break;

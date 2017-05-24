@@ -52,7 +52,6 @@ class VideoList extends Component {
 	}
 	render() {
 		const data = this.props.data || [];
-		console.log(data);
 		const format = util.formatNumber;
 		return(
 			<div className="video-list-container">
@@ -75,7 +74,7 @@ class VideoList extends Component {
 												<div className="meta-info">
 													<p className="view">{`播放: ${format(obj.view)}`}</p>
 													<p className="favorite">{`收藏: ${format(obj.favorite)}`}</p>
-													<p className="danmaku">{`弹幕: ${format(obj.danmaku)}`}</p>
+													<p className="author">{`up主: ${obj.up}`}</p>
 													<p className="share">{`分享: ${format(obj.share)}`}</p>
 												</div>
 											</div>

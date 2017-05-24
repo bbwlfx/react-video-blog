@@ -180,6 +180,11 @@ body {
 												margin: 2px 0px;
 												text-align: left;
 											}
+											.author {
+												text-overflow: ellipsis;
+												overflow: hidden;
+												white-space: nowrap;
+											}
 										}
 									}
 									&:hover {
