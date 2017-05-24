@@ -41,6 +41,7 @@ class Home extends Component {
 		});
 	}
 	render() {
+		const { videoList } = this.state.userInfo;
 		const changeInfo = this.state.showModal ? (<ChangeInfo isShow={this.state.showModal} closeModal={this.closeModal} getUserInfo={this.getUserInfo} userInfo={this.state.userInfo}/>) : null;
 		return(
 			<div className="home-container">
@@ -51,7 +52,7 @@ class Home extends Component {
 					/>
 				</div>
 				<div id="video-list">
-					<VideoList />
+					<VideoList getUserInfo={this.getUserInfo} data={videoList} />
 				</div>
 				<div id="change-info">
 					{changeInfo}

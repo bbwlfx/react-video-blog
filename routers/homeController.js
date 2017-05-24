@@ -32,10 +32,34 @@ const saveData = postData => (req, res) => {
 		});
 	});
 };
-
+const saveVideoList = (allData, username) => (req, res) => {
+	const { title, av, img, time } = allData;
+	util.readData(data => {
+		for(let i = 0, len = data.length; i < len; i++) {
+			if(data[i].username === username) {
+				const videoList = data[i].videoList;
+				videoList.push({
+					title,
+					av,
+					img,
+					time
+				})
+				data[i] = Object.assign({}, data[i], { videoList });
+				break;
+			}
+		}
+		data = JSON.stringify(data);
+		util.writeData(data, () => {
+			res.end(JSON.stringify({
+				code: 0,
+				message: 'upload video success'
+			}));
+		})
+	})
+}
 module.exports = {
 	render: (req, res) => {
-		if(req.cookies["has_login"]) {
+		if(req.cookies["has_login"] === 'yes') {
 			const map = ['username', 'sex', 'email', 'profile', 'avatar', 'nickname', 'age'];
 			const userInfo = {};
 			map.map(value => {
@@ -57,13 +81,32 @@ module.exports = {
 		}); 
 		req.on('end', () => {
 			postData = JSON.parse(postData);
+			if(postData.av) {
+				http.get(`http://www.jijidown.com/Api/AvToCid/${postData.av}`, result => {
+					if(result.statusCode !== 200) {
+						res.end(JSON.stringify({
+							code: 1,
+							message: 'upload video fail',
+						}));
+					}
+					let data = '';
+					result.on('data', (chunk) => {
+						data += chunk;
+					})
+					result.on('end', () => {
+						data = JSON.parse(data);
+						saveVideoList(data, postData.username)(req, res);
+					})
+				})
+				return true;
+			}
 			const { file, avatarUrl } = postData;
 			if(file && avatarUrl) {
 				const base64Data = avatarUrl.replace(/^data:image\/\w+;base64,/, "");
 				const dataBuffer = new Buffer(base64Data, 'base64');
 				fs.writeFile(path.join(__dirname, '../static/src/images/', file), dataBuffer, function(err) {
 	        if(err){
-	        	res.end(SON.stringify({
+	        	res.end(JSON.stringify({
 							code: 1,
 							message: 'upload fail',
 						}));

@@ -6,6 +6,11 @@ class Infomation extends Component {
 	constructor(props) {
 		super(props);
 		this.showModal = props.showModal;
+		this.logout = this.logout.bind(this);
+	}
+	logout() {
+		document.cookie = "has_login=no;path=/";
+		window.location.reload();
 	}
 	render() {
 		const { nickname, sex, email, profile, age, avatar } = this.props.userInfo;
@@ -39,6 +44,9 @@ class Infomation extends Component {
 					</table>
 					<p className="infomation-edit">
 						<a href="javascript:void(0)" onClick={this.showModal}>[编辑个人资料]</a>
+					</p>
+					<p className="infomation-edit">
+						<a href="javascript:void(0)" onClick={this.logout}>[注销账号]</a>
 					</p>
 				</div>
 			</div>

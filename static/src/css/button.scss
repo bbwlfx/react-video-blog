@@ -26,3 +26,8 @@
 		background-color: #fff;
 	}
 }
+.btn.progress {
+	&:hover {
+		cursor: progress;
+	}
+}

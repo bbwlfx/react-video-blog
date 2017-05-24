@@ -10,7 +10,7 @@ body {
 		z-index: -999;
 		width: 100%;
 		height: 100%;
-		background-image: url('/assets/images/sakura.jpg');
+		background-image: url(/static/src/images/sakura.jpg);
 		background-position: center center;
 		background-size: cover;
 		background-repeat: no-repeat;	
@@ -127,12 +127,33 @@ body {
 						height: 90%;
 						padding: 0;
 						margin: -10px 0px 0px;
+						overflow-y: scroll;
 						.item {
 							width: 25%;
 							float: left;
 							.item-content {
 								height: 200px;
 								margin: 10px 10px 0px;
+								text-align: center;
+								.img-a {
+									img {
+										width: 160px;
+										height: 100px;
+										margin: auto;
+									}
+								}
+								.title-a {
+									width: 160px;
+									display: inline-block;
+							    line-height: 20px;
+							    height: 38px;
+							    margin-top: 6px;
+							    overflow: hidden;
+							    font-size: 12px;
+							    text-align: left;
+							    text-decoration: none;
+							    color: #000;
+								}
 							}
 						}
 					}
