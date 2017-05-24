@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Modal from './modal';
+import moment from 'moment';
 import util from '../lib/util';
+
 class VideoList extends Component {
 	constructor(props) {
 		super(props);
@@ -50,6 +52,8 @@ class VideoList extends Component {
 	}
 	render() {
 		const data = this.props.data || [];
+		console.log(data);
+		const format = util.formatNumber;
 		return(
 			<div className="video-list-container">
 				<Modal
@@ -61,11 +65,20 @@ class VideoList extends Component {
 				<div className="video-list-content">
 					<ul className="list">
 						{
-							data.map(obj => (
-								<li className="item">
+							data.map((obj, index) => (
+								<li className="item" key={index}>
 									<div className="item-content">
 										<a href={`http://www.bilibili.com/video/av${obj.av}`} target="_blank" className="img-a">
 											<img src={obj.img} />
+											<span className="video-time">{moment(obj.time*1000).format('mm:ss')}</span>
+											<div className="meta-mask">
+												<div className="meta-info">
+													<p className="view">{`播放: ${format(obj.view)}`}</p>
+													<p className="favorite">{`收藏: ${format(obj.favorite)}`}</p>
+													<p className="danmaku">{`弹幕: ${format(obj.danmaku)}`}</p>
+													<p className="share">{`分享: ${format(obj.share)}`}</p>
+												</div>
+											</div>
 										</a>
 										<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{obj.title}</a>
 									</div>

@@ -61,6 +61,18 @@ const util = {
 			});
 		});
 		return Promise.race([promise, timer]);
+	},
+	formatNumber(number) {
+		if(!number) {
+			return null;
+		}
+		if(typeof number !== 'number') {
+			number = Number(number);
+		}
+		if(number < 10000) {
+			return number;
+		}
+		return number = (Math.round(number /1000) / 10).toFixed(1) + '万';
 	}
 };
 export default util;

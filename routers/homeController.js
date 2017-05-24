@@ -33,7 +33,8 @@ const saveData = postData => (req, res) => {
 	});
 };
 const saveVideoList = (allData, username) => (req, res) => {
-	const { title, av, img, time } = allData;
+	const { title, av, img, time } = allData.data;
+	const { view, favorite, danmaku, share } = allData.detail.data;
 	util.readData(data => {
 		for(let i = 0, len = data.length; i < len; i++) {
 			if(data[i].username === username) {
@@ -42,7 +43,11 @@ const saveVideoList = (allData, username) => (req, res) => {
 					title,
 					av,
 					img,
-					time
+					time,
+					view,
+					favorite,
+					danmaku,
+					share
 				})
 				data[i] = Object.assign({}, data[i], { videoList });
 				break;
@@ -82,6 +87,7 @@ module.exports = {
 		req.on('end', () => {
 			postData = JSON.parse(postData);
 			if(postData.av) {
+				let allData = null;
 				http.get(`http://www.jijidown.com/Api/AvToCid/${postData.av}`, result => {
 					if(result.statusCode !== 200) {
 						res.end(JSON.stringify({
@@ -90,12 +96,32 @@ module.exports = {
 						}));
 					}
 					let data = '';
-					result.on('data', (chunk) => {
+					result.on('data', chunk => {
 						data += chunk;
 					})
 					result.on('end', () => {
 						data = JSON.parse(data);
-						saveVideoList(data, postData.username)(req, res);
+						http.get(`http://api.bilibili.com/archive_stat/stat?aid=${postData.av}`, response => {
+							if(res.statusCode !== 200) {
+								res.end(JSON.stringify({
+									code: 1,
+									message: 'upload video fail',
+								}));
+							}
+							let detail = '';
+							response.on('data', chunk => {
+								detail += chunk;
+							});
+							response.on('end', () => {
+								detail = JSON.parse(detail);
+								allData = Object.assign({}, {
+									data,
+									detail
+								});
+								saveVideoList(allData, postData.username)(req, res);
+							})
+						})
+						
 					})
 				})
 				return true;
