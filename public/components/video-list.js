@@ -12,6 +12,8 @@ class VideoList extends Component {
 		this.showModal = this.showModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.uploadHandle = this.uploadHandle.bind(this);
+		this.uploadVideo = this.uploadVideo.bind(this);
+		this.videoChange = this.videoChange.bind(this);
 	}
 	showModal() {
 		this.setState({
@@ -23,6 +25,9 @@ class VideoList extends Component {
 			isShow: false
 		});
 	}
+	uploadVideo() {
+		this.video.click();
+	}
 	uploadHandle() {
 		const getUserInfo = this.props.getUserInfo;
 		const url = this.inputURL.value;
@@ -30,7 +35,7 @@ class VideoList extends Component {
 			const av = /\d+/g.exec(url)[0];
 			const data = {
 				av,
-				username: window.userInfo.username
+				source: 'bilibili'
 			};
 			util.fetch('/upload', {
 				method: 'POST',
@@ -50,9 +55,35 @@ class VideoList extends Component {
 			alert('请输出正确的视频url');
 		}
 	}
+	videoChange() {
+		const getUserInfo = this.props.getUserInfo;
+		if(!this.video.files[0]) {
+			return;
+		};
+		const file = this.video.files[0];
+		if(file.type !== 'video/mp4' && file.type !== 'video/flv') {
+			alert('视频类型错误');
+			return;
+		};
+		if(file.size > 200 * 1024 * 1024) {
+			alert('视频应不大于200MB');
+			return;
+		};
+		const formData = new FormData();
+		formData.append('file', file);
+		util.fetch('/upload/video', {
+			method: 'POST',
+			data: formData
+		}).then(res => {
+			getUserInfo();
+		}, (err) => {
+			console.log(err);
+		})
+	}
 	render() {
 		const data = this.props.data || [];
 		const format = util.formatNumber;
+		const { openVideoPlayer } = this.props;
 		return(
 			<div className="video-list-container">
 				<Modal
@@ -64,28 +95,49 @@ class VideoList extends Component {
 				<div className="video-list-content">
 					<ul className="list">
 						{
-							data.map((obj, index) => (
-								<li className="item" key={index}>
-									<div className="item-content">
-										<a href={`http://www.bilibili.com/video/av${obj.av}`} target="_blank" className="img-a">
-											<img src={obj.img} />
-											<span className="video-time">{moment(obj.time*1000).format('mm:ss')}</span>
-											<div className="meta-mask">
-												<div className="meta-info">
-													<p className="view">{`播放: ${format(obj.view)}`}</p>
-													<p className="favorite">{`收藏: ${format(obj.favorite)}`}</p>
-													<p className="author">{`up主: ${obj.up}`}</p>
-													<p className="share">{`分享: ${format(obj.share)}`}</p>
-												</div>
+							data.map((obj, index) => {
+								if(obj.source === 'bilibili') {
+									return (<li className="item" key={index}>
+											<div className="item-content">
+												<a href={`http://www.bilibili.com/video/av${obj.av}`} target="_blank" className="img-a">
+													<img src={obj.img} />
+													<span className="video-time">{moment(obj.time*1000).format('mm:ss')}</span>
+													<div className="meta-mask">
+														<div className="meta-info">
+															<p className="view">{`播放: ${format(obj.view)}`}</p>
+															<p className="favorite">{`收藏: ${format(obj.favorite)}`}</p>
+															<p className="author">{`up主: ${obj.up}`}</p>
+															<p className="share">{`分享: ${format(obj.share)}`}</p>
+														</div>
+													</div>
+												</a>
+												<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{obj.title}</a>
 											</div>
-										</a>
-										<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{obj.title}</a>
-									</div>
-								</li>
-							))
+										</li>
+									)
+								} else {
+									return (
+										<li className="item" key={index}>
+											<div className="item-content">
+												<a href="javascript:void(0)" className="img-a" onClick={() => { openVideoPlayer(obj.src); }}>
+													<video src={obj.src}></video>
+												</a>
+												<a className="title-a" href="javascript:void(0)" onClick={() => { openVideoPlayer(obj.src); }}>{decodeURIComponent(obj.name)}</a>
+											</div>
+										</li>
+									);
+								}
+							})
 						}
 					</ul>
 					<div className="upload-container">
+						<button className="btn btn-primary" onClick={this.uploadVideo}>上传本地视频</button>
+						<input
+							style={{ display: 'none' }}
+							type="file" accept=".mp4, .flv"
+							ref={(ref) => { this.video = ref }}
+							onChange={this.videoChange}
+							/>
 						<button className="btn btn-primary" onClick={this.showModal}>添加视频链接</button>
 					</div>
 				</div>

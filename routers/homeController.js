@@ -2,10 +2,11 @@ const queryString = require('querystring');
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
+const BusBoy = require('busboy');
 const util = require('../lib/util');
 
 const saveData = postData => (req, res) => {
-	const username = postData.username;
+	const username = req.coockies.username;
 	const { file, sex, email, profile, age, nickname } = postData;
 	let originData = {}
 	util.readData(data => {
@@ -32,7 +33,8 @@ const saveData = postData => (req, res) => {
 		});
 	});
 };
-const saveVideoList = (allData, username) => (req, res) => {
+const saveVideoList = (allData) => (req, res) => {
+	const username = req.cookies.username;
 	const { title, av, img, time, up } = allData.data;
 	const { view, favorite, danmaku, share } = allData.detail.data;
 	util.readData(data => {
@@ -48,7 +50,8 @@ const saveVideoList = (allData, username) => (req, res) => {
 					favorite,
 					danmaku,
 					share,
-					up
+					up,
+					source: allData.source
 				})
 				data[i] = Object.assign({}, data[i], { videoList });
 				break;
@@ -115,9 +118,10 @@ module.exports = {
 								detail = JSON.parse(detail);
 								allData = Object.assign({}, {
 									data,
-									detail
+									detail,
+									source: postData.source
 								});
-								saveVideoList(allData, postData.username)(req, res);
+								saveVideoList(allData)(req, res);
 							})
 						})
 						
@@ -154,5 +158,46 @@ module.exports = {
 				}
 			}
 		});
+	},
+	handleUploadVideo: (req, res) => {
+		let fileName = null;
+		const username = req.cookies.username;
+		let saveTo = null;
+		
+		const busboy = new BusBoy({
+			headers: req.headers
+		});
+		busboy.on('file', (fieldname, file, filename) => {
+			fileName = filename;
+			saveTo = path.join(__dirname, '../static/src/videos/', encodeURIComponent(filename));
+			file.pipe(fs.createWriteStream(saveTo));
+		});
+		busboy.on('finish', () => {
+			const extractPath = path.join(__dirname, '../static/src/images/', `${fileName}-cover.jpg`);
+			util.readData(data => {
+				for(let i = 0, len = data.length; i < len; i++) {
+					if(data[i].username === username) {
+						const videoList = data[i].videoList;
+						videoList.push({
+							img: '',
+							src: path.join(__dirname, '../static/src/videos', encodeURIComponent(fileName)),
+							source: 'local',
+							name: encodeURIComponent(fileName)
+						})
+						data[i] = Object.assign({}, data[i], { videoList });
+						break;
+					}
+				}
+				data = JSON.stringify(data);
+				util.writeData(data, () => {
+					res.end(JSON.stringify({
+						code: 0,
+						message: 'upload video success'
+					}));
+				})
+			})
+			
+		});
+		req.pipe(busboy);
 	}
 };

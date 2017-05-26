@@ -11,14 +11,14 @@ const util = {
 		config = config || {};
 		let fetchConfig = {
 			method: config.method || 'GET',
-			credientials: 'same-origin',
+			credentials: 'same-origin',
 		};
 		let promise = null;
 		if(config.data && ['GET', 'DELETE'].indexOf(fetchConfig.method) >= 0) {
 			url += (url.indexOf('?')=== -1 ? '?' : '&') + generateData(config.data);
 		}
 		if(['POST', 'PUT', 'PATCH'].indexOf(config.method) >= 0) {
-			if(window.FormDatforea && config.data instanceof FormData) {
+			if(window.FormData && config.data instanceof FormData) {
 				fetchConfig = Object.assign(fetchConfig, {
 					body: config.data,
 					headers: {

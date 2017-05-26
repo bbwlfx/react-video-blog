@@ -20,10 +20,8 @@ class ChangeInfo extends Component {
 			return false;
 		}
 		this.file = this.upload.files[0];
-		const createUrl = window.createObjectURL || window.URL.createObjectURL || window.webkitURL.createObjectURL;
 		const read = new FileReader();
 		read.onload = (e) => {
-			console.log(e.target.result);
 			this.setState({
 				avatar: e.target.result,
 			});

@@ -135,6 +135,11 @@ body {
 								height: 155px;
 								margin: 10px 10px 0px;
 								text-align: center;
+								video {
+									height: 100%;
+									width: 100%;
+									background-color: #eee;
+								}
 								.img-a {
 									display: inline-block;
 									position: relative;
@@ -218,6 +223,9 @@ body {
 					.upload-container {
 						height: 10%;
 						text-align: center;
+						button {
+							margin: 0px 10px;
+						}
 					}
 				}
 					

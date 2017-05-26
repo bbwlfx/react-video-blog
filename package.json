@@ -8,7 +8,7 @@
     "build": "webpack",
     "start": "nodemon app.js"
   },
-  "author": "",
+  "author": "eCho",
   "license": "ISC",
   "dependencies": {
     "babel": "^6.23.0",
@@ -17,6 +17,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "busboy": "^0.2.14",
     "css-loader": "^0.28.1",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",

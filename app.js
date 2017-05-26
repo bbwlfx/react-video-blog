@@ -23,6 +23,7 @@ const server = http.createServer((req, res) => {
 	app.use('/form/addUser', loginRouter.handleRegister);
 	app.use('/upload', homeRouter.handleUpload);
 	app.use('/get_userinfo', homeRouter.getUserInfo);
+	app.use('/upload/video', homeRouter.handleUploadVideo);
 
   // renderFile
 	app.use('/', loginRouter.render('login'));

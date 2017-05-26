@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Infomation from '../components/infomation';
 import ChangeInfo from '../components/change-info';
 import VideoList from '../components/video-list';
+import VideoPlayer from '../components/video-player';
 import util from '../lib/util';
 class Home extends Component {
 	constructor(props) {
@@ -9,10 +10,14 @@ class Home extends Component {
 		this.state = {
 			showModal: false,
 			userInfo: {},
+			showVideoPlayer: false,
+			localVideoSrc: ''
 		}
 		this.closeModal = this.closeModal.bind(this);
 		this.showModal = this.showModal.bind(this);
 		this.getUserInfo = this.getUserInfo.bind(this);
+		this.openVideoPlayer = this.openVideoPlayer.bind(this);
+		this.closeVideoPlayer = this.closeVideoPlayer.bind(this);
 	}
 	componentDidMount() {
 		this.getUserInfo();
@@ -40,22 +45,45 @@ class Home extends Component {
 			});
 		});
 	}
+	openVideoPlayer(src) {
+		this.setState({
+			showVideoPlayer: true,
+			localVideoSrc: src
+		});
+	}
+	closeVideoPlayer() {
+		this.setState({
+			showVideoPlayer: false
+		});
+	}
 	render() {
 		const { videoList } = this.state.userInfo;
-		const changeInfo = this.state.showModal ? (<ChangeInfo isShow={this.state.showModal} closeModal={this.closeModal} getUserInfo={this.getUserInfo} userInfo={this.state.userInfo}/>) : null;
+		const { showModal, showVideoPlayer, localVideoSrc, userInfo } = this.state;
+		const changeInfo = showModal ? (<ChangeInfo isShow={showModal} closeModal={this.closeModal} getUserInfo={this.getUserInfo} userInfo={userInfo}/>) : null;
 		return(
 			<div className="home-container">
 				<div id="infomation">
 					<Infomation
 					showModal={this.showModal}
-					userInfo={this.state.userInfo}
+					userInfo={userInfo}
 					/>
 				</div>
 				<div id="video-list">
-					<VideoList getUserInfo={this.getUserInfo} data={videoList} />
+					<VideoList
+						getUserInfo={this.getUserInfo}
+						data={videoList}
+						openVideoPlayer={this.openVideoPlayer}
+						/>
 				</div>
 				<div id="change-info">
 					{changeInfo}
+				</div>
+				<div id="video-player">
+					{showVideoPlayer && 
+						<VideoPlayer
+							closeVideoPlayer={this.closeVideoPlayer}
+							src={localVideoSrc}
+						/>}
 				</div>
 			</div>
 		);
