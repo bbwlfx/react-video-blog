@@ -22,12 +22,12 @@
 2. 用户信息修改
 3. 图片上传与处理
 ## 技术栈
-1. node.js
-2. react.js
-3. webpack
-4. ECMAScript2015
-5. pug
-6. sass
+1. node.js (为了锻炼nodejs流程，没用express和koa框架，特意用原生撸的)
+2. react.js （项目太小为了省事直接用react没用redux）
+3. webpack (项目太小随便写写)
+4. ECMAScript2015 (习惯问题)
+5. pug (为了测试node配合模板输出)
+6. sass (同样是习惯问题)
 ## 启动方式
 1. 在根目录安装所有依赖 npm install
 2. 在终端启动node服务器 npm run start

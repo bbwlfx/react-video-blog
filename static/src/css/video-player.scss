@@ -1,0 +1,32 @@
+.video-player-container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: 100;
+	background-color: rgba(0, 0, 0, .5);
+	.video-player-content {
+		display: inline-block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		video {
+			height: 380px;
+			width: 640px;
+		}
+	}
+	.close-btn {
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: #fff;
+		text-decoration: none;
+		font-size: 50px;
+		&:hover {
+			color: #000;
+		}
+	}
+}
+
