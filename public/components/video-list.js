@@ -9,11 +9,7 @@ class VideoList extends Component {
 		this.state = {
 			isShow: false
 		};
-		this.showModal = this.showModal.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-		this.uploadHandle = this.uploadHandle.bind(this);
-		this.uploadVideo = this.uploadVideo.bind(this);
-		this.videoChange = this.videoChange.bind(this);
+		util.bindMethods(['showModal', 'closeModal', 'uploadHandle', 'uploadVideo', 'videoChange'], this);
 	}
 	showModal() {
 		this.setState({

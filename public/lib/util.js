@@ -73,6 +73,13 @@ const util = {
 			return number;
 		}
 		return number = (Math.round(number /1000) / 10).toFixed(1) + '万';
+	},
+	bindMethods(methods, obj) {
+		methods.forEach(method => {
+			if(typeof obj[method] === 'function') {
+				obj[method] = obj[method].bind(obj);
+			}
+		})
 	}
 };
 export default util;

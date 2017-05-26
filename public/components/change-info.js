@@ -7,10 +7,8 @@ class ChangeInfo extends Component {
 		this.state = {
 			avatar: '../../static/src/images/' + (this.props.userInfo.avatar || 'avatar-default.png'),
 		}
-		this.uploadAvatar = this.uploadAvatar.bind(this);
-		this.changeAvatar = this.changeAvatar.bind(this);
+		util.bindMethods(['uploadAvatar', 'changeAvatar', 'uploadData'], this);
 		this.closeModal = props.closeModal;
-		this.uploadData = this.uploadData.bind(this);
 	}
 	uploadAvatar() {
 		this.upload.click();

@@ -13,11 +13,7 @@ class Home extends Component {
 			showVideoPlayer: false,
 			localVideoSrc: ''
 		}
-		this.closeModal = this.closeModal.bind(this);
-		this.showModal = this.showModal.bind(this);
-		this.getUserInfo = this.getUserInfo.bind(this);
-		this.openVideoPlayer = this.openVideoPlayer.bind(this);
-		this.closeVideoPlayer = this.closeVideoPlayer.bind(this);
+		util.bindMethods(['closeModal', 'showModal', 'getUserInfo', 'openVideoPlayer', 'closeVideoPlayer'], this);
 	}
 	componentDidMount() {
 		this.getUserInfo();
