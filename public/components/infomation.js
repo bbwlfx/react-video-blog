@@ -17,7 +17,7 @@ class Infomation extends Component {
 		return (
 			<div className="infomation-container">
 				<div className="avatar-container">
-					<img className="avatar" src={`${outputUrl}${avatar ? avatar : 'avatar-default.png'}`} alt="请刷新页面"/>
+					<img className="avatar" src={`${outputUrl}${avatar ? decodeURIComponent(avatar) : 'avatar-default.png'}`} alt="请刷新页面"/>
 				</div>
 				<div className="infomation-content">
 					<table>

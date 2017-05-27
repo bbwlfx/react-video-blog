@@ -11,7 +11,7 @@ const util = {
 		config = config || {};
 		let fetchConfig = {
 			method: config.method || 'GET',
-			credentials: 'same-origin',
+			credentials: 'include',
 		};
 		let promise = null;
 		if(config.data && ['GET', 'DELETE'].indexOf(fetchConfig.method) >= 0) {
@@ -47,6 +47,7 @@ const util = {
 				});
 			}, config.timeout || 10000);
 		})
+		console.log(fetchConfig);
 		promise = new Promise((resolve, reject) => {
 			fetch(url, fetchConfig).then((response) => {
 				const { status } = response;

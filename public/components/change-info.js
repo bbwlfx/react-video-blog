@@ -49,7 +49,6 @@ class ChangeInfo extends Component {
 		});
 	}
 	render() {
-		const avatar = window.userInfo.avatar;
 		return(
 			<div className="modal-container">
 				<div className="layer"></div>

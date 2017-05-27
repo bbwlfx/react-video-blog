@@ -6,7 +6,7 @@ const BusBoy = require('busboy');
 const util = require('../lib/util');
 
 const saveData = postData => (req, res) => {
-	const username = req.coockies.username;
+	const username = req.cookies.username;
 	const { file, sex, email, profile, age, nickname } = postData;
 	let originData = {}
 	util.readData(data => {
@@ -18,7 +18,7 @@ const saveData = postData => (req, res) => {
 					email: email ? email : data[i]['email'],
 					profile: profile ? profile : data[i]['profile'],
 					age: age ? age : data[i]['age'],
-					avatar: file ? file : data[i]['avatar'],
+					avatar: file ? encodeURIComponent(file) : data[i]['avatar'],
 					nickname: nickname ? nickname : data[i]['nickname']
 				});
 				break;
@@ -133,7 +133,7 @@ module.exports = {
 			if(file && avatarUrl) {
 				const base64Data = avatarUrl.replace(/^data:image\/\w+;base64,/, "");
 				const dataBuffer = new Buffer(base64Data, 'base64');
-				fs.writeFile(path.join(__dirname, '../static/src/images/', file), dataBuffer, function(err) {
+				fs.writeFile(path.join(__dirname, '../static/src/images/', encodeURIComponent(file)), dataBuffer, function(err) {
 	        if(err){
 	        	res.end(JSON.stringify({
 							code: 1,
