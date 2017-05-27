@@ -1,13 +1,17 @@
 extends ./common/common.pug
+block links
+	+_link('../static/src/css/login.css')
 block doms
-	form(action="/form/login" method="post" enctype="application/x-www-form-urlencoded")
-		p
-			span username:
-			input(type="text" name="username" class="form-username")
-		p
-			span password:
-			input(type="password" name="password" class="form-password")
-		p
-			input(type="submit" class="form-submit" value="submit")
-			a(href="/form/register")
-				input(type="button" class="form-register" value="register")
+	div.form-container
+		h2.title Welcome to Echo
+		form(action="/form/login" method="post" enctype="application/x-www-form-urlencoded")
+			p
+				span username:
+				input(type="text" name="username" class="form-username" placeholder="please enter your username")
+			p
+				span password:
+				input(type="password" name="password" class="form-password" placeholder="please enter your password")
+			p.btn-area
+				input(type="submit" class="form-submit" value="submit")
+				a(href="/form/register")
+					input(type="button" class="form-register" value="register")

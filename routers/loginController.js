@@ -23,7 +23,7 @@ module.exports = {
 					}
 				}
 				if(exist) {
-					const { username, avatar, email, sex, profile, nickname, age } = req.userInfo.detail;
+					const { username } = req.userInfo.detail;
 					res.setHeader('Set-Cookie', [
 						'has_login=yes;path=/',
 						`username=${username || ''};path=/`,
