@@ -3,7 +3,9 @@ import Infomation from '../components/infomation';
 import ChangeInfo from '../components/change-info';
 import VideoList from '../components/video-list';
 import VideoPlayer from '../components/video-player';
+import Prompt from '../components/prompt';
 import util from '../lib/util';
+
 class Home extends Component {
 	constructor(props) {
 		super(props);
@@ -81,6 +83,7 @@ class Home extends Component {
 							src={localVideoSrc}
 						/>}
 				</div>
+				<Prompt></Prompt>
 			</div>
 		);
 	}

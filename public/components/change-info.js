@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import util from '../lib/util';
+import Prompt from './prompt';
 
 class ChangeInfo extends Component {
 	constructor(props) {
@@ -42,10 +43,10 @@ class ChangeInfo extends Component {
 			data,
 		}).then(() => {
 			this.props.getUserInfo();
-			alert('修改成功');
+			Prompt.show('修改成功');
 			this.closeModal();
 		}, () => {
-			alert('修改失败');
+			Prompt.show('修改失败');
 		});
 	}
 	render() {

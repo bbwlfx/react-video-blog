@@ -1,0 +1,44 @@
+.prompt {
+	position: fixed;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 16px;
+	color: #000;
+	line-height: 48px;
+	z-index: 999;
+	.promptMessage {
+		border: 1px solid #e9e9e9;
+		background-color: #fff;
+		border-radius: 5px;
+		text-align: center;
+		width: 500px;
+		display: block;
+		color: #000;
+		box-shadow: 0px 0px 10px #ccc;
+	}
+}
+
+.prompt-enter {
+    .prompt {
+        opacity: 0;
+    }
+    &.prompt-enter-active {
+        .prompt {
+            opacity: 1;
+            transition: opacity .5s ease-in;
+        }
+    }
+}
+
+.prompt-leave {
+    .prompt {
+        opacity: 1;
+    }
+    &.prompt-leave-active {
+        .prompt {
+            opacity: 0;
+            transition: opacity .5s ease-out;
+        }
+    }
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from './modal';
 import moment from 'moment';
 import util from '../lib/util';
+import Prompt from './prompt';
 
 class VideoList extends Component {
 	constructor(props) {
@@ -38,17 +39,17 @@ class VideoList extends Component {
 				data
 			}).then(res => {
 				if(res.code === 0) {
-					alert('上传成功');
+					Prompt.show('上传成功');
 					this.closeModal();
 					getUserInfo();
 				} else {
-					alert('上传失败，请稍后重试');
+					Prompt.show('上传失败，请稍后重试');
 				}
 			}, () => {
-				alert('上传失败，请稍后重试');
+				Prompt.show('上传失败，请稍后重试');
 			});
 		} else {
-			alert('请输出正确的视频url');
+			Prompt.show('请输入正确的视频url');
 		}
 	}
 	videoChange() {
@@ -58,22 +59,24 @@ class VideoList extends Component {
 		};
 		const file = this.video.files[0];
 		if(file.type !== 'video/mp4' && file.type !== 'video/flv') {
-			alert('视频类型错误');
+			Prompt.show('视频类型错误');
 			return;
 		};
 		if(file.size > 200 * 1024 * 1024) {
-			alert('视频应不大于200MB');
+			Prompt.show('视频应不大于200MB');
 			return;
 		};
 		const formData = new FormData();
 		formData.append('file', file);
+		Prompt.show('视频正在上传中');
 		util.fetch('/upload/video', {
 			method: 'POST',
 			data: formData
 		}).then(res => {
+			Prompt.show('上传成功');
 			getUserInfo();
 		}, (err) => {
-			console.log(err);
+			Prompt.show('上传失败');
 		})
 	}
 	render() {
