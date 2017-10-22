@@ -10,7 +10,7 @@ body {
 		z-index: -999;
 		width: 100%;
 		height: 100%;
-		background-image: url(/static/src/images/sakura.jpg);
+		background-image: url(/static/src/images/timg.jpeg);
 		background-position: center center;
 		background-size: cover;
 		background-repeat: no-repeat;	
@@ -65,7 +65,7 @@ body {
 				display: none;
 			}
 		}
-		#video-list {
+		#main-container {
 			flex: 8;
 			position: relative;
 			.modal-content {

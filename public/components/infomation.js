@@ -23,23 +23,23 @@ class Infomation extends Component {
 					<table>
 						<tr className="infomation-name">
 							<td>昵称:</td>
-							<td>{nickname}</td>
+							<td>{decodeURIComponent(nickname)}</td>
 						</tr>
 						<tr className="infomation-sex">
 							<td>性别:</td>
-							<td>{sex}</td>
+							<td>{decodeURIComponent(sex)}</td>
 						</tr>
 						<tr className="infomation-age">
 							<td>年龄:</td>
-							<td>{age}</td>
+							<td>{decodeURIComponent(age)}</td>
 						</tr>
 						<tr className="infomation-email">
 							<td>邮箱:</td>
-							<td>{email}</td>
+							<td>{decodeURIComponent(email)}</td>
 						</tr>
 						<tr className="infomation-profile">
 							<td>博客:</td>
-							<td>{profile}</td>
+							<td>{decodeURIComponent(profile)}</td>
 						</tr>
 					</table>
 					<p className="infomation-edit">

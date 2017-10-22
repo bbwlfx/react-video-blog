@@ -4,67 +4,98 @@ const http = require('http');
 const path = require('path');
 const BusBoy = require('busboy');
 const util = require('../lib/util');
+const command = require('../mysql/command');
 
 const saveData = postData => (req, res) => {
 	const username = req.cookies.username;
 	const { file, sex, email, profile, age, nickname } = postData;
-	let originData = {}
-	util.readData(data => {
-		for(let i = 0, len = data.length; i < len; i++) {
-			if(data[i].username === username) {
-				originData = data[i];
-				data[i] = Object.assign({}, data[i], {
-					sex: sex ? sex : data[i]['sex'],
-					email: email ? email : data[i]['email'],
-					profile: profile ? profile : data[i]['profile'],
-					age: age ? age : data[i]['age'],
-					avatar: file ? encodeURIComponent(file) : data[i]['avatar'],
-					nickname: nickname ? nickname : data[i]['nickname']
-				});
-				break;
+	let originData = {};
+
+	delete postData.username;
+
+	for(let prop in postData) {
+		let p = prop;
+		if(postData[prop]) {
+			if(prop === 'file') {
+				p = 'avatar';
 			}
+			global.connection.query(command.updateField[p], [encodeURIComponent(postData[prop]), username], (err, rows) => {
+				if(err) {
+					console.log(`[update ${prop} error!]:`, err);
+					res.end(JSON.stringify({
+						code: 1,
+						message: `update ${prop} fail`,
+					}));
+					return;
+				}
+				console.log(`update ${prop} succeed!]`);
+				res.end(JSON.stringify({
+					code: 0,
+					message: 'success',
+				}));
+			});
 		}
-		data = JSON.stringify(data);
-		util.writeData(data, () => {
-			res.end(JSON.stringify({
-				code: 0,
-				message: 'success',
-			}));
-		});
-	});
+	}
 };
-const saveVideoList = (allData) => (req, res) => {
+const saveLocalVideo = (data) => (req, res) => {
 	const username = req.cookies.username;
-	const { title, av, img, time, up } = allData.data;
-	const { view, favorite, danmaku, share } = allData.detail.data;
-	util.readData(data => {
-		for(let i = 0, len = data.length; i < len; i++) {
-			if(data[i].username === username) {
-				const videoList = data[i].videoList;
-				videoList.push({
-					title,
-					av,
-					img,
-					time,
-					view,
-					favorite,
-					danmaku,
-					share,
-					up,
-					source: allData.source
-				})
-				data[i] = Object.assign({}, data[i], { videoList });
-				break;
+	const { img, src, source, name } = data;
+	console.log(data);
+	new Promise((resolve, reject) => {
+		global.connection.query(command.selectUid, [username], (err, rows) => {
+			if(err) {
+				reject(err);
+				return;
 			}
-		}
-		data = JSON.stringify(data);
-		util.writeData(data, () => {
+			resolve(rows);
+		});
+	}).then((rows) => {
+		return rows[0].id;
+	}, (err) => {
+		console.log('[save local video error!]:', err);
+	}).then((uid) => {
+		global.connection.query(command.saveLocalVideo, [uid, img, src, source, name], (err, rows) => {
+			if(err) {
+				console.log('[save local video error!]:', err);				
+			}
+			console.log('[save local video succeed!]');		
 			res.end(JSON.stringify({
 				code: 0,
 				message: 'upload video success'
 			}));
-		})
-	})
+		});
+	});
+}
+const saveVideoList = (allData) => (req, res) => {
+	const username = req.cookies.username;
+	const { title, av, img, time, up } = allData.data;
+	const { view, favorite, danmaku, share } = allData.detail.data;
+	new Promise((resolve, reject) => {
+		global.connection.query(command.selectUid, [username], (err, rows) => {
+			if(err) {
+				reject(err);
+				return;
+			}
+			resolve(rows);
+		});
+	}).then((rows) => {
+		return rows[0].id;
+	}, (err) => {
+		console.log('[save video error!]:', err);
+	}).then((uid) => {
+		console.log('uid:', uid);
+		global.connection.query(command.saveVideo, [uid, encodeURIComponent(title), av, img, time, view, favorite, danmaku, share, encodeURIComponent(up), allData.source], (err, rows) => {
+			if(err) {
+				console.log('[save video error!]:', err);				
+				return;
+			}
+			console.log('[save video succeed!]');	
+			res.end(JSON.stringify({
+				code: 0,
+				message: 'upload video success'
+			}));	
+		});
+	});
 }
 module.exports = {
 	render: (req, res) => {
@@ -150,13 +181,26 @@ module.exports = {
 	},
 	getUserInfo: (req, res) => {
 		const username = req.queryString.username;
-		util.readData(data => {
-			for(let i = 0, len = data.length; i < len; i++) {
-				if(data[i].username === username) {
-					res.end(JSON.stringify(data[i]));
-					break;
+		new Promise((resolve, reject) => {
+			global.connection.query(command.selectUserByName, [username], (err, rows, fields) => {
+				if(err) {
+					reject(err);
+					return;
 				}
-			}
+				resolve(rows[0]);
+			});
+		}).then((user) => {
+			global.connection.query(command.selectVideoList, [user.id], (err, rows) => {
+				if(err) {
+					console.log('[get userinfo error!]:', err);
+					return;
+				}
+				console.log('[get userinfo succees!]');
+				const data = Object.assign({}, user, { videoList: rows });
+				res.end(JSON.stringify(data));
+			})
+		}, (err) => {
+			console.log('[get userinfo error!]:', err);
 		});
 	},
 	handleUploadVideo: (req, res) => {
@@ -173,30 +217,12 @@ module.exports = {
 			file.pipe(fs.createWriteStream(saveTo));
 		});
 		busboy.on('finish', () => {
-			const extractPath = path.join(__dirname, '../static/src/images/', `${fileName}-cover.jpg`);
-			util.readData(data => {
-				for(let i = 0, len = data.length; i < len; i++) {
-					if(data[i].username === username) {
-						const videoList = data[i].videoList;
-						videoList.push({
-							img: '',
-							src: path.join(__dirname, '../static/src/videos', encodeURIComponent(fileName)),
-							source: 'local',
-							name: encodeURIComponent(fileName)
-						})
-						data[i] = Object.assign({}, data[i], { videoList });
-						break;
-					}
-				}
-				data = JSON.stringify(data);
-				util.writeData(data, () => {
-					res.end(JSON.stringify({
-						code: 0,
-						message: 'upload video success'
-					}));
-				})
-			})
-			
+			saveLocalVideo({
+				img: '',
+				src: path.join(__dirname, '../static/src/videos', encodeURIComponent(fileName)),
+				source: 'local',
+				name: encodeURIComponent(fileName)
+			})(req, res);
 		});
 		req.pipe(busboy);
 	}

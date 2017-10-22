@@ -1,5 +1,8 @@
 # NR-Enterprise
 ## 历史版本
+### v1.0.0
+1. 增加mysql数据库
+2. 将数据移入mysql数据库中
 ### v0.1.6
 1. 增加Prompt组件，替换所有alert
 ### v0.1.5
@@ -34,8 +37,12 @@
 5. pug (为了测试node配合模板输出)
 6. sass (同样是习惯问题)
 ## 启动方式
-1. 在根目录安装所有依赖 npm install
-2. 在终端启动node服务器 npm run start
-3. 在终端启动webpack打包 npm run startfe
-4. 请确保4567端口以及4444端口未被占用
+1. 请确保4567端口以及4444端口未被占用
+2. 请确保node版本在v4.4.4以上
+3. 请确保电脑安装mysql数据库
+4. 进入mysql创建数据库videoDB：CREATE DATABSE videoDB;
+4. 在根目录安装所有依赖 npm install
+5. 在终端运行脚本创建数据表 node createDB.js
+6. 在终端启动node服务器 npm run start
+7. 在终端启动webpack打包 npm run startfe
 ## 以上

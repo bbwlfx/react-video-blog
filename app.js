@@ -3,10 +3,21 @@ const http = require('http');
 const express = require('./lib/express');
 const util = require('./lib/util');
 const path = require('path');
+const connection = require('./mysql/');
 
 const loginRouter = require('./routers/loginController');
 const errorRouter = require('./routers/errorController');
 const homeRouter = require('./routers/homeController');
+
+connection.connect(function(err) {
+  if(err) {
+    console.log('!!!somethings runing wrong:' + err);
+    return;
+  }
+  console.log('[connection connect] succeed!');
+});
+
+global.connection = connection;
 
 const app = new express();
 

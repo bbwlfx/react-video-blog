@@ -28,7 +28,7 @@ class VideoList extends Component {
 	uploadHandle() {
 		const getUserInfo = this.props.getUserInfo;
 		const url = this.inputURL.value;
-		if(/http:\/\/www.bilibili.com\/video\/av/.test(url)) {
+		if(/https?:\/\/www.bilibili.com\/video\/av/.test(url)) {
 			const av = /\d+/g.exec(url)[0];
 			const data = {
 				av,
@@ -105,12 +105,12 @@ class VideoList extends Component {
 														<div className="meta-info">
 															<p className="view">{`播放: ${format(obj.view)}`}</p>
 															<p className="favorite">{`收藏: ${format(obj.favorite)}`}</p>
-															<p className="author">{`up主: ${obj.up}`}</p>
+															<p className="author">{`up主: ${decodeURIComponent(obj.up)}`}</p>
 															<p className="share">{`分享: ${format(obj.share)}`}</p>
 														</div>
 													</div>
 												</a>
-												<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{obj.title}</a>
+												<a className="title-a" href={`http://www.bilibili.com/video/av${obj.av}`}>{decodeURIComponent(obj.title)}</a>
 											</div>
 										</li>
 									)

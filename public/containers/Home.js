@@ -66,7 +66,7 @@ class Home extends Component {
 					userInfo={userInfo}
 					/>
 				</div>
-				<div id="video-list">
+				<div id="main-container">
 					<VideoList
 						getUserInfo={this.getUserInfo}
 						data={videoList}
